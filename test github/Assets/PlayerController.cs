@@ -4,32 +4,45 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    Animator playerAnim;
-
-
-    private void Awake()
+    Animator animator;
+    public Rigidbody rb;
+    int RunForwardHash;
+    
+    // Start is called before the first frame update
+    void Start()
     {
-        playerAnim = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
+        RunForwardHash = Animator.StringToHash("RunForward");
     }
 
+    public void input()
+    {
+        if (Input.GetKey(KeyCode.W))
+        {
+            rb.AddForce(transform.forward * 10);
+        }
+    }
+
+    // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            print("stop");
-            playerAnim.SetBool("RunForward", false);
-            playerAnim.SetBool("Jump", false);
+        bool RunForward = animator.GetBool(RunForwardHash);
+        bool forwardPressed = Input.GetKey("w");
 
-        }
-        if (Input.GetKeyDown(KeyCode.W))
+     
+
+        //if player presses w key
+        if (!RunForward && forwardPressed)
         {
-            print("run");
-            playerAnim.SetBool("RunForward", true);
+            animator.SetBool(RunForwardHash, true);
         }
-        if (Input.GetKeyDown(KeyCode.E))
+
+        //if plyer is not pressing w
+        if (RunForward && !forwardPressed) 
         {
-            print("Jump");
-            playerAnim.SetBool("Jump", true);
+            animator.SetBool(RunForwardHash, false);
         }
+
+        input();
     }
 }
