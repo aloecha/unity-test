@@ -5,9 +5,11 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     Animator animator;
-    public Rigidbody rb;
+
     int RunForwardHash;
-    
+    public CharacterController controller;
+    public float speed = 12f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,22 +17,22 @@ public class PlayerController : MonoBehaviour
         RunForwardHash = Animator.StringToHash("RunForward");
     }
 
-    public void input()
-    {
-        if (Input.GetKey(KeyCode.W))
-        {
-            rb.AddForce(transform.forward * 10);
-        }
-    }
+
+
 
     // Update is called once per frame
     void Update()
     {
         bool RunForward = animator.GetBool(RunForwardHash);
         bool forwardPressed = Input.GetKey("w");
+        float x = Input.GetAxis("Horizontal");
+        float z = Input.GetAxis("Vertical");
 
-     
+        Vector3 move = transform.right * x + transform.forward * z;
 
+        controller.Move(move * speed * Time.deltaTime);
+        
+        
         //if player presses w key
         if (!RunForward && forwardPressed)
         {
@@ -42,7 +44,5 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetBool(RunForwardHash, false);
         }
-
-        input();
     }
 }
